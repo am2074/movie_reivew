@@ -1,5 +1,6 @@
 class CompaniesController < ApplicationController
   before_action :set_company, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:index, :show]
 
   # GET /companies
   # GET /companies.json
@@ -7,14 +8,14 @@ class CompaniesController < ApplicationController
     @companies = Company.all
   end
 
-  # GET /companies/1
+  # GET /companies/1 
   # GET /companies/1.json
   def show
   end
 
   # GET /companies/new
   def new
-    @company = Company.new
+    @company = current_user.companies.build 
   end
 
   # GET /companies/1/edit
@@ -24,7 +25,7 @@ class CompaniesController < ApplicationController
   # POST /companies
   # POST /companies.json
   def create
-    @company = Company.new(company_params)
+    @company = current_user.companies.build(company_params)
 
     respond_to do |format|
       if @company.save
